@@ -16,10 +16,10 @@ def emotion_detect():
     text_to_analyze = request.args.get("textToAnalyze")
     response = emotion_detector(text_to_analyze)
     
-    text_to_return = "For the given statement, the system response is 'anger': {}, \
-                       'disgust: {}, 'fear': {}, 'joy': {}, \
-                       and 'sadness': {}}. \
-                       The doinant emotion is {}.".format(tuple(response.values()))
+    text_to_return = "For the given statement, the system response is 'anger': {}, ".format(str(response['anger'])) + \
+                       "'disgust': {}, 'fear': {}, ".format(str(response['disgust']), str(response['fear'])) + \
+                       "'joy': {}, and 'sadness': {}.".format(str(response['joy']), str(response['sadness'])) + \
+                       "The dominant emotion is {}.".format(str(response['dominant_emotion']))
 
     return text_to_return
 
