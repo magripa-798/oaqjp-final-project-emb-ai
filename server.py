@@ -1,3 +1,7 @@
+''' Executing this function initiates the application of emotiom
+    detection to be executed over the Flask channel and deployed on
+    localhost:5000.
+'''
 # Import Flask, render_template, request
 from flask import Flask, render_template, request
 # Import the emotion_detector
@@ -15,11 +19,14 @@ def emotion_detect():
 
     text_to_analyze = request.args.get("textToAnalyze")
     response = emotion_detector(text_to_analyze)
-    
-    text_to_return = "For the given statement, the system response is 'anger': {}, ".format(str(response['anger'])) + \
-                       "'disgust': {}, 'fear': {}, ".format(str(response['disgust']), str(response['fear'])) + \
-                       "'joy': {}, and 'sadness': {}.".format(str(response['joy']), str(response['sadness'])) + \
-                       "The dominant emotion is {}.".format(str(response['dominant_emotion']))
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again"
+    text_to_return = "For the given statement," + \
+                     f"the system response is 'anger': {str(response['anger'])}, " + \
+                     f"'disgust': {str(response['disgust'])}, 'fear': {str(response['fear'])}, " + \
+                     f"'joy': {str(response['joy'])}," + \
+                     f" and 'sadness': {str(response['sadness'])}." + \
+                     f"The dominant emotion is {str(response['dominant_emotion'])}."
 
     return text_to_return
 
@@ -31,6 +38,4 @@ def render_index_page():
     return render_template("index.html")
 
 if __name__ == "__main__":
-    ''' This functions executes the flask app and deploys it on localhost:5000
-    '''
     app.run(host="0.0.0.0", port=5000)
